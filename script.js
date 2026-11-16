@@ -127,3 +127,58 @@ function renderizarTabela() {
     tabela.appendChild(linha);
   });
 }
+
+const resultado = document.getElementById("resultado");
+const btnSalarioAlto = document.getElementById("btnSalarioAlto");
+const btnMediaSalarial = document.getElementById("btnMediaSalarial");
+const btnCargosUnicos = document.getElementById("btnCargosUnicos");
+const btnNomesMaiusculo = document.getElementById("btnNomesMaiusculo");
+
+const mostrarResultado = (texto) => {
+  resultado.textContent = texto;
+};
+
+const salariosAltos = () => funcionarios.filter((f) => f.salario > 5000);
+
+btnSalarioAlto.addEventListener("click", () => {
+  const lista = salariosAltos();
+  if (lista.length === 0) {
+    mostrarResultado("Nenhum funcionário com salário acima de R$ 5000.");
+    return;
+  }
+  const linhas = lista.map((f) => `${f.nome} (R$ ${f.salario.toFixed(2)})`);
+  mostrarResultado(`Salário acima de R$ 5000: ${linhas.join("; ")}`);
+});
+
+const mediaSalarial = () => {
+  if (funcionarios.length === 0) return 0;
+  const soma = funcionarios.reduce(
+    (acumulador, f) => acumulador + f.salario,
+    0,
+  );
+  return soma / funcionarios.length;
+};
+btnMediaSalarial.addEventListener("click", () => {
+  mostrarResultado(`Média salarial: R$ ${mediaSalarial().toFixed(2)}`);
+});
+
+const cargosUnicos = () =>
+  Array.from(new Set(funcionarios.map((f) => f.cargo)));
+btnCargosUnicos.addEventListener("click", () => {
+  const cargos = cargosUnicos();
+  if (cargos.length === 0) {
+    mostrarResultado("Nenhum funcionário cadastrado.");
+    return;
+  }
+  mostrarResultado(`Cargos únicos: ${cargos.join(", ")}`);
+});
+
+const nomesMaiusculo = () => funcionarios.map((f) => f.nome.toUpperCase());
+btnNomesMaiusculo.addEventListener("click", () => {
+  const nomes = nomesMaiusculo();
+  if (nomes.length === 0) {
+    mostrarResultado("Nenhum funcionário cadastrado.");
+    return;
+  }
+  mostrarResultado(`Nomes: ${nomes.join(", ")}`);
+});
