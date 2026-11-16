@@ -4,6 +4,7 @@ class Funcionario {
     this._idade = idade;
     this._cargo = cargo;
     this._salario = salario;
+    this._id = Date.now();
   }
 
   get nome() {
@@ -34,13 +35,17 @@ class Funcionario {
     this._salario = valor;
   }
 
+  get id() {
+    return this._id;
+  }
+
   toString() {
     return `${this.nome}, ${this.idade} anos, ${this.cargo}, R$ ${this.salario.toFixed(2)}`;
   }
 }
 
 let funcionarios = [];
-let indiceEdicao = null;
+let idEdicao = null;
 
 const form = document.getElementById("form-funcionarios");
 const inputNome = document.getElementById("nome");
@@ -49,26 +54,34 @@ const inputCargo = document.getElementById("cargo");
 const inputSalario = document.getElementById("salario");
 const tabela = document.getElementById("tabela-funcionarios");
 const botaoSubmit = form.querySelector("button[type='submit']");
+const buscarPorId = (id) => funcionarios.find((f) => f.id === id);
+const removerPorId = (id) => {
+  funcionarios = funcionarios.filter((f) => f.id !== id);
+};
+const adicionarFuncionario = (nome, idade, cargo, salario) => {
+  funcionarios.push(new Funcionario(nome, idade, cargo, salario));
+};
+const atualizarFuncionario = (id, nome, idade, cargo, salario) => {
+  const funcionario = buscarPorId(id);
+  funcionario.nome = nome;
+  funcionario.idade = idade;
+  funcionario.cargo = cargo;
+  funcionario.salario = salario;
+};
 
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  if (indiceEdicao === null) {
-    const funcionario = new Funcionario(
-      inputNome.value,
-      Number(inputIdade.value),
-      inputCargo.value,
-      Number(inputSalario.value),
-    );
-    funcionarios.push(funcionario);
-  } else {
-    const funcionario = funcionarios[indiceEdicao];
-    funcionario.nome = inputNome.value;
-    funcionario.idade = Number(inputIdade.value);
-    funcionario.cargo = inputCargo.value;
-    funcionario.salario = Number(inputSalario.value);
+  const nome = inputNome.value;
+  const idade = Number(inputIdade.value);
+  const cargo = inputCargo.value;
+  const salario = Number(inputSalario.value);
 
-    indiceEdicao = null;
+  if (idEdicao === null) {
+    adicionarFuncionario(nome, idade, cargo, salario);
+  } else {
+    atualizarFuncionario(idEdicao, nome, idade, cargo, salario);
+    idEdicao = null;
     botaoSubmit.textContent = "Cadastrar";
   }
   renderizarTabela();
@@ -77,7 +90,7 @@ form.addEventListener("submit", function (event) {
 
 function renderizarTabela() {
   tabela.innerHTML = "";
-  funcionarios.forEach(function (funcionario, indice) {
+  funcionarios.forEach((funcionario) => {
     const linha = document.createElement("tr");
     linha.innerHTML = `<td>${funcionario.nome}</td>
       <td>${funcionario.idade}</td>
@@ -94,15 +107,15 @@ function renderizarTabela() {
       inputCargo.value = funcionario.cargo;
       inputSalario.value = funcionario.salario;
 
-      indiceEdicao = indice;
+      idEdicao = funcionario.id;
       botaoSubmit.textContent = "Salvar";
     };
 
     const botaoExcluir = document.createElement("button");
     botaoExcluir.textContent = "Excluir";
     botaoExcluir.onclick = function () {
-      funcionarios.splice(indice, 1);
-      indiceEdicao = null;
+      removerPorId(funcionario.id);
+      idEdicao = null;
       botaoSubmit.textContent = "Cadastrar";
       form.reset();
       renderizarTabela();
