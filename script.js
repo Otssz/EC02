@@ -90,6 +90,11 @@ form.addEventListener("submit", (event) => {
 
 function renderizarTabela() {
   tabela.innerHTML = "";
+
+  if (funcionarios.length === 0) {
+    tabela.innerHTML = `<tr><td colspan="5" class="vazio">Nenhum funcionário cadastrado ainda ☆</td></tr>`;
+  }
+
   funcionarios.forEach((funcionario) => {
     const linha = document.createElement("tr");
     linha.innerHTML = `<td>${funcionario.nome}</td>
@@ -100,6 +105,7 @@ function renderizarTabela() {
     const celulaAcoes = document.createElement("td");
     const botaoEditar = document.createElement("button");
     botaoEditar.textContent = "Editar";
+    botaoEditar.className = "btn btn-sm btn-outline-secondary me-1";
 
     botaoEditar.onclick = function () {
       inputNome.value = funcionario.nome;
@@ -113,6 +119,7 @@ function renderizarTabela() {
 
     const botaoExcluir = document.createElement("button");
     botaoExcluir.textContent = "Excluir";
+    botaoExcluir.className = "btn btn-sm btn-outline-danger";
     botaoExcluir.onclick = function () {
       removerPorId(funcionario.id);
       idEdicao = null;
@@ -126,7 +133,17 @@ function renderizarTabela() {
     linha.appendChild(celulaAcoes);
     tabela.appendChild(linha);
   });
+
+  atualizarPainel();
 }
+
+const atualizarPainel = () => {
+  document.getElementById("statTotal").textContent = funcionarios.length;
+  document.getElementById("statTopo").textContent = funcionarios.length;
+  document.getElementById("statAltos").textContent = salariosAltos().length;
+  document.getElementById("statMedia").textContent =
+    `R$ ${mediaSalarial().toFixed(2)}`;
+};
 
 const resultado = document.getElementById("resultado");
 const btnSalarioAlto = document.getElementById("btnSalarioAlto");
@@ -182,3 +199,6 @@ btnNomesMaiusculo.addEventListener("click", () => {
   }
   mostrarResultado(`Nomes: ${nomes.join(", ")}`);
 });
+
+// Desenha a tabela vazia e o painel assim que a página abre
+renderizarTabela();
