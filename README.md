@@ -8,9 +8,9 @@ Sistema de gestão de funcionários de uma startup, feito como estudo de caso da
 
 ## Funcionalidades
 
-- Cadastro, edição e exclusão de funcionários (nome, idade, cargo e salário)
-- Painel com total de funcionários, salários acima de R$ 5000 e média salarial
-- Relatórios: salário acima de R$ 5000, média salarial, cargos únicos e nomes em maiúsculo
+1. Cadastro, edição e exclusão de funcionários (nome, idade, cargo e salário)
+2. Painel com total de funcionários, salários acima de R$ 5000 e média salarial
+3. Relatórios: salário acima de R$ 5000, média salarial, cargos únicos e nomes em maiúsculo
 
 ## Como executar
 
