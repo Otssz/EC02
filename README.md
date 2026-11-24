@@ -1,4 +1,4 @@
-# Stream JS ☆
+# Stream JS 
 
 Sistema de gestão de funcionários de uma startup, feito como estudo de caso da faculdade com HTML, CSS, JavaScript e Bootstrap 5.
 
